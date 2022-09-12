@@ -5,12 +5,12 @@ class TodolistsController < ApplicationController
   end
   # ---- ここからコードを書きましょう ---- #
   def create
-    # １. データを新規登録するためのインスタンス作成
-    list = List.new(list_params)
-    # ２. データをデータベースに保存するためのsaveメソッド実行
-    list.save
-    # ３. トップ画面へリダイレクト
-    redirect_to todolist_path(list.id)
+    @list = List.new(list_params)
+    if @list.save
+      redirect_to todolist_path(@list.id)
+    else
+      render :new
+    end
   end
   def index
     @lists = List.all
@@ -23,12 +23,13 @@ class TodolistsController < ApplicationController
   end
   def update
 
-    # ---- ここからコードを書きましょう ---- #
-    list = List.find(params[:id])
-    list.update(list_params)
-    redirect_to todolist_path(list.id)
-    # ---- ここまでのあいだにコードを書きましょう ---- #
-
+    @list = List.find(params[:id])
+    if @list.update(list_params)
+    redirect_to todolist_path(@list.id)
+    else
+      render :edit
+    end
+    
   end
 
 
